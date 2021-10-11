@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   {% load static %}
+   <link rel="stylesheet" href="{% static 'styles.css' %}">
+   <title>Dojos and their ninjas</title>
+</head>
+<body>
+   <div id="container">
+      <form action="/process" method="POST">
+         {% csrf_token %}
+         <div class="adder">
+            <h1>Add a Dojo</h1>
+            
+            <input class="entry" type="text" name="name" placeholder=" Please enter the dojo's name">
+            <input class="entry" type="text" name="city" placeholder=" Please enter the dojo's city">
+            <input class="entry" type="text" name="state" placeholder=" Please enter the dojo's state">
+            
+            <input type="Submit" value="Add" name="DojoButton"> 
+         </div>
+         <div class="adder">   
+            <h1>Add a Ninja</h1>
+            
+            <input class="entry" type="text" name="Fname" placeholder=" Please enter the ninja's first name">
+            <input class="entry" type="text" name="Lname" placeholder=" Please enter the ninja's last name">
+            <select name="sel_dojo">
+               <option value="nowhere">Please select a dojo</option>
+               {% for dojo in Dojos %}
+                  <option value={{dojo.id}}>{{dojo.name}} - {{dojo.city}} {{dojo.state}}</option>
+               {% endfor %}
+            </select>
+            
+            <input type="Submit" value="Add" name="NinjaButton"> 
+         </div>
+      </form>
+
+      <div id="list">
+         <h1>The dojos and their ninjas</h1>
+         {% for ds in Dojos %}
+            <h4>Ninjas at the {{ds.name}} dojo ({{ds.ninjas.count}})</h4>
+            <ul>
+            {% for ns in Ninjas %}
+               {% if ns.dojo.id == ds.id %}
+                  <li>{{ns.first_name}} {{ns.last_name}}</li>
+               {% endif %}
+            {% endfor %}
+            </ul>
+         {% endfor %}
+      </div>
+   </div>
+</body>
+</html>
